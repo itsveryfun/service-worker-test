@@ -3,38 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fetch Request Headers Example</title>
+  <title>Service Worker Alert Headers</title>
 </head>
 <body>
-  <h1>Fetch Request Headers Example</h1>
+  <h1>Service Worker Fetch Example</h1>
   <p id="status">Waiting for fetch request...</p>
 
   <script>
+    if ('serviceWorker' in navigator) {
+      // 注册 Service Worker
+      navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+        console.log('Service Worker 注册成功:', registration);
+
+        // 监听来自 Service Worker 的消息
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          alert('请求头信息:\n' + event.data);
+          console.log('请求头信息:\n' + event.data);
+        });
+
+        // 发起一个 fetch 请求
+        fetchData();
+      }).catch((error) => {
+        console.error('Service Worker 注册失败:', error);
+      });
+    } else {
+      console.log('当前浏览器不支持 Service Worker');
+    }
+
+    // 发起 fetch 请求
     function fetchData() {
-      const url = 'https://jsonplaceholder.typicode.com/posts/1';
-
-      // 自定义请求头
-      const headers = new Headers({
-        'Custom-Header': 'MyCustomValue',
-        'Content-Type': 'application/json'
-      });
-
-      // 构造请求
-      const request = new Request(url, {
-        method: 'GET',
-        headers: headers
-      });
-
-      // 打印自定义请求头
-      const headersInfo = [];
-      request.headers.forEach((value, key) => {
-        headersInfo.push(`${key}: ${value}`);
-      });
-
-      alert('请求头信息:\n' + headersInfo.join('\n'));
-
-      // 发起请求
-      fetch(request)
+      fetch('https://jsonplaceholder.typicode.com/posts/1') // 使用测试 API
         .then((response) => response.json())
         .then((data) => {
           console.log('请求成功:', data);
@@ -45,9 +43,6 @@
           document.getElementById('status').textContent = '请求失败';
         });
     }
-
-    // 执行函数
-    fetchData();
   </script>
 </body>
 </html>
