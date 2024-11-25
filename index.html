@@ -12,7 +12,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       // 注册 Service Worker
-      navigator.serviceWorker.register('/x.js').then((registration) => {
+      navigator.serviceWorker.register('x.js').then((registration) => {
         console.log('Service Worker 注册成功:', registration);
 
         // 监听来自 Service Worker 的消息
