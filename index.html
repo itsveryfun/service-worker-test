@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch Request Headers Example</title>
+</head>
+<body>
+  <h1>Fetch Request Headers Example</h1>
+  <p id="status">Waiting for fetch request...</p>
+
+  <script>
+    function fetchData() {
+      const url = 'https://jsonplaceholder.typicode.com/posts/1';
+
+      // 自定义请求头
+      const headers = new Headers({
+        'Custom-Header': 'MyCustomValue',
+        'Content-Type': 'application/json'
+      });
+
+      // 构造请求
+      const request = new Request(url, {
+        method: 'GET',
+        headers: headers
+      });
+
+      // 打印自定义请求头
+      const headersInfo = [];
+      request.headers.forEach((value, key) => {
+        headersInfo.push(`${key}: ${value}`);
+      });
+
+      alert('请求头信息:\n' + headersInfo.join('\n'));
+
+      // 发起请求
+      fetch(request)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('请求成功:', data);
+          document.getElementById('status').textContent = '请求成功，已获取数据';
+        })
+        .catch((error) => {
+          console.error('请求失败:', error);
+          document.getElementById('status').textContent = '请求失败';
+        });
+    }
+
+    // 执行函数
+    fetchData();
+  </script>
+</body>
+</html>
